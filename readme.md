@@ -11,23 +11,24 @@ By transitioning from static machine learning models to continuous, uncertainty-
 ## 2. Technical Roadmap & Methodological Steps
 
 To align with modern regulatory expectations (such as FDA Predetermined Change Control Plans - PCCP), the architecture follows a four-layer causal pipeline:
+    
+     [Candidate Dose + Weight]
+     │
+     ▼ (Layer 1: Gaussian Process PK Model)
 
-[Candidate Dose + Weight]
-│
-▼ (Layer 1: Gaussian Process PK Model)
+     [Predicted AUC]
+     │
+     ▼ (Layer 2: Gaussian Process Biomarker Model)
 
-[Predicted AUC]
-│
-▼ (Layer 2: Gaussian Process Biomarker Model)
+     [ctDNA Reduction Rate]
+     ├──► (Layer 3: Efficacy Model) ──► [Tumor Shrinkage]
 
-[ctDNA Reduction Rate]
-├──► (Layer 3: Efficacy Model) ──► [Tumor Shrinkage]
-
-└──► (Layer 4: Toxicity Model) ──► [Grade 3 AE Risk]
+     └──► (Layer 4: Toxicity Model) ──► [Grade 3 AE Risk]
 
 ### Step 1: Baseline Cohort Training (Phase I Clinical Data)
 * Utilize a dense 8-patient dataset featuring step-escalated dosages ($40\,\text{mg}$ to $160\,\text{mg}$) alongside patient-specific baseline covariates (Body Weight, Age, EGFR Mutation status).
 * Compute the biomarker metric:
+  
 $$\text{ctDNA Reduction} = \frac{\text{ctDNA}_{\text{Post}} - \text{ctDNA}_{\text{Baseline}}}{\text{ctDNA}_{\text{Baseline}}} \times 100\%$$
 
 ### Step 2: Continuous Multi-Layer Gaussian Process Regression (GPR)
@@ -64,15 +65,16 @@ $$\text{Utility} = w_1 \cdot |\text{Median Efficacy}| - w_2 \cdot P(\text{Toxici
 
 ```
 ### 4 Cohort Simulation Outputs ($n=1000$ per dose)
-Cohort Simulation Outputs ($n=1000$ per dose)
-```python
-Dose (mg),Mean Shrinkage (%),AE Risk,Utility Score
-40,-8.84%,0.00,8.84
-80,-25.69%,0.00,25.69
-120,-25.98%,0.00,25.98
-160,-30.79%,0.00,30.79
-```
 
+
+#### Cohort Simulation Results ($n=1000$ per dose)
+
+| Dose (mg) | Mean Shrinkage | AE Risk | Utility Score |
+| :--- | :--- | :--- | :--- |
+| **40** | 8.84% | 0.00 | 8.84 |
+| **80** | 25.69% | 0.00 | 25.69 |
+| **120** | 25.98% | 0.00 | 25.98 |
+| **160** | 30.79% | 0.00 | 30.79 |
 
 ## 5. Clinical Dosage Strategy & Recommendations
 
