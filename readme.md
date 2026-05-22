@@ -15,11 +15,14 @@ To align with modern regulatory expectations (such as FDA Predetermined Change C
 [Candidate Dose + Weight]
 │
 ▼ (Layer 1: Gaussian Process PK Model)
+
 [Predicted AUC]
 │
 ▼ (Layer 2: Gaussian Process Biomarker Model)
+
 [ctDNA Reduction Rate]
 ├──► (Layer 3: Efficacy Model) ──► [Tumor Shrinkage]
+
 └──► (Layer 4: Toxicity Model) ──► [Grade 3 AE Risk]
 
 ### Step 1: Baseline Cohort Training (Phase I Clinical Data)
